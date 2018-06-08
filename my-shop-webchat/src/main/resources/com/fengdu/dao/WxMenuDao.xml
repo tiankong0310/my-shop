@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fengdu.dao.WxMenuDao">
+
+    <resultMap type="com.fengdu.entity.WxMenuEntity" id="wxMenuMap">
+        <result property="id" column="id"/>
+        <result property="parentid" column="parentId"/>
+        <result property="path" column="path"/>
+        <result property="menuname" column="menuName"/>
+        <result property="menutype" column="menuType"/>
+        <result property="menukey" column="menuKey"/>
+        <result property="url" column="url"/>
+        <result property="appid" column="appid"/>
+        <result property="pagepath" column="pagepath"/>
+        <result property="location" column="location"/>
+        <result property="haschildren" column="hasChildren"/>
+        <result property="wxid" column="wxid"/>
+        <result property="opby" column="opBy"/>
+        <result property="opat" column="opAt"/>
+        <result property="delflag" column="delFlag"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.fengdu.entity.WxMenuEntity">
+		select
+			`id`,
+			`parentId`,
+			`path`,
+			`menuName`,
+			`menuType`,
+			`menuKey`,
+			`url`,
+			`appid`,
+			`pagepath`,
+			`location`,
+			`hasChildren`,
+			`wxid`,
+			`opBy`,
+			`opAt`,
+			`delFlag`
+		from wx_menu
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.fengdu.entity.WxMenuEntity">
+		select
+    		`id`,
+    		`parentId`,
+    		`path`,
+    		`menuName`,
+    		`menuType`,
+    		`menuKey`,
+    		`url`,
+    		`appid`,
+    		`pagepath`,
+    		`location`,
+    		`hasChildren`,
+    		`wxid`,
+    		`opBy`,
+    		`opAt`,
+    		`delFlag`
+		from wx_menu
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from wx_menu
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.fengdu.entity.WxMenuEntity">
+		insert into wx_menu(
+			`id`,
+			`parentId`,
+			`path`,
+			`menuName`,
+			`menuType`,
+			`menuKey`,
+			`url`,
+			`appid`,
+			`pagepath`,
+			`location`,
+			`hasChildren`,
+			`wxid`,
+			`opBy`,
+			`opAt`,
+			`delFlag`)
+		values(
+			#{id},
+			#{parentid},
+			#{path},
+			#{menuname},
+			#{menutype},
+			#{menukey},
+			#{url},
+			#{appid},
+			#{pagepath},
+			#{location},
+			#{haschildren},
+			#{wxid},
+			#{opby},
+			#{opat},
+			#{delflag})
+	</insert>
+	 
+	<update id="update" parameterType="com.fengdu.entity.WxMenuEntity">
+		update wx_menu 
+		<set>
+			<if test="parentid != null">`parentId` = #{parentid}, </if>
+			<if test="path != null">`path` = #{path}, </if>
+			<if test="menuname != null">`menuName` = #{menuname}, </if>
+			<if test="menutype != null">`menuType` = #{menutype}, </if>
+			<if test="menukey != null">`menuKey` = #{menukey}, </if>
+			<if test="url != null">`url` = #{url}, </if>
+			<if test="appid != null">`appid` = #{appid}, </if>
+			<if test="pagepath != null">`pagepath` = #{pagepath}, </if>
+			<if test="location != null">`location` = #{location}, </if>
+			<if test="haschildren != null">`hasChildren` = #{haschildren}, </if>
+			<if test="wxid != null">`wxid` = #{wxid}, </if>
+			<if test="opby != null">`opBy` = #{opby}, </if>
+			<if test="opat != null">`opAt` = #{opat}, </if>
+			<if test="delflag != null">`delFlag` = #{delflag}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from wx_menu where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from wx_menu where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

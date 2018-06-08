@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fengdu.dao.CmsSiteDao">
+
+    <resultMap type="com.fengdu.entity.CmsSiteEntity" id="cmsSiteMap">
+        <result property="id" column="id"/>
+        <result property="shopid" column="shopid"/>
+        <result property="siteName" column="site_name"/>
+        <result property="siteDomain" column="site_domain"/>
+        <result property="siteIcp" column="site_icp"/>
+        <result property="siteLogo" column="site_logo"/>
+        <result property="siteWapLogo" column="site_wap_logo"/>
+        <result property="siteQq" column="site_qq"/>
+        <result property="siteEmail" column="site_email"/>
+        <result property="siteTel" column="site_tel"/>
+        <result property="weiboName" column="weibo_name"/>
+        <result property="weiboUrl" column="weibo_url"/>
+        <result property="weiboQrcode" column="weibo_qrcode"/>
+        <result property="wechatName" column="wechat_name"/>
+        <result property="wechatId" column="wechat_id"/>
+        <result property="wechatQrcode" column="wechat_qrcode"/>
+        <result property="seoKeywords" column="seo_keywords"/>
+        <result property="seoDescription" column="seo_description"/>
+        <result property="footerContent" column="footer_content"/>
+        <result property="opby" column="opBy"/>
+        <result property="opat" column="opAt"/>
+        <result property="delflag" column="delFlag"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.fengdu.entity.CmsSiteEntity">
+		select
+			`id`,
+			`shopid`,
+			`site_name`,
+			`site_domain`,
+			`site_icp`,
+			`site_logo`,
+			`site_wap_logo`,
+			`site_qq`,
+			`site_email`,
+			`site_tel`,
+			`weibo_name`,
+			`weibo_url`,
+			`weibo_qrcode`,
+			`wechat_name`,
+			`wechat_id`,
+			`wechat_qrcode`,
+			`seo_keywords`,
+			`seo_description`,
+			`footer_content`,
+			`opBy`,
+			`opAt`,
+			`delFlag`
+		from cms_site
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.fengdu.entity.CmsSiteEntity">
+		select
+    		`id`,
+    		`shopid`,
+    		`site_name`,
+    		`site_domain`,
+    		`site_icp`,
+    		`site_logo`,
+    		`site_wap_logo`,
+    		`site_qq`,
+    		`site_email`,
+    		`site_tel`,
+    		`weibo_name`,
+    		`weibo_url`,
+    		`weibo_qrcode`,
+    		`wechat_name`,
+    		`wechat_id`,
+    		`wechat_qrcode`,
+    		`seo_keywords`,
+    		`seo_description`,
+    		`footer_content`,
+    		`opBy`,
+    		`opAt`,
+    		`delFlag`
+		from cms_site
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cms_site
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.fengdu.entity.CmsSiteEntity">
+		insert into cms_site(
+			`id`,
+			`shopid`,
+			`site_name`,
+			`site_domain`,
+			`site_icp`,
+			`site_logo`,
+			`site_wap_logo`,
+			`site_qq`,
+			`site_email`,
+			`site_tel`,
+			`weibo_name`,
+			`weibo_url`,
+			`weibo_qrcode`,
+			`wechat_name`,
+			`wechat_id`,
+			`wechat_qrcode`,
+			`seo_keywords`,
+			`seo_description`,
+			`footer_content`,
+			`opBy`,
+			`opAt`,
+			`delFlag`)
+		values(
+			#{id},
+			#{shopid},
+			#{siteName},
+			#{siteDomain},
+			#{siteIcp},
+			#{siteLogo},
+			#{siteWapLogo},
+			#{siteQq},
+			#{siteEmail},
+			#{siteTel},
+			#{weiboName},
+			#{weiboUrl},
+			#{weiboQrcode},
+			#{wechatName},
+			#{wechatId},
+			#{wechatQrcode},
+			#{seoKeywords},
+			#{seoDescription},
+			#{footerContent},
+			#{opby},
+			#{opat},
+			#{delflag})
+	</insert>
+	 
+	<update id="update" parameterType="com.fengdu.entity.CmsSiteEntity">
+		update cms_site 
+		<set>
+			<if test="shopid != null">`shopid` = #{shopid}, </if>
+			<if test="siteName != null">`site_name` = #{siteName}, </if>
+			<if test="siteDomain != null">`site_domain` = #{siteDomain}, </if>
+			<if test="siteIcp != null">`site_icp` = #{siteIcp}, </if>
+			<if test="siteLogo != null">`site_logo` = #{siteLogo}, </if>
+			<if test="siteWapLogo != null">`site_wap_logo` = #{siteWapLogo}, </if>
+			<if test="siteQq != null">`site_qq` = #{siteQq}, </if>
+			<if test="siteEmail != null">`site_email` = #{siteEmail}, </if>
+			<if test="siteTel != null">`site_tel` = #{siteTel}, </if>
+			<if test="weiboName != null">`weibo_name` = #{weiboName}, </if>
+			<if test="weiboUrl != null">`weibo_url` = #{weiboUrl}, </if>
+			<if test="weiboQrcode != null">`weibo_qrcode` = #{weiboQrcode}, </if>
+			<if test="wechatName != null">`wechat_name` = #{wechatName}, </if>
+			<if test="wechatId != null">`wechat_id` = #{wechatId}, </if>
+			<if test="wechatQrcode != null">`wechat_qrcode` = #{wechatQrcode}, </if>
+			<if test="seoKeywords != null">`seo_keywords` = #{seoKeywords}, </if>
+			<if test="seoDescription != null">`seo_description` = #{seoDescription}, </if>
+			<if test="footerContent != null">`footer_content` = #{footerContent}, </if>
+			<if test="opby != null">`opBy` = #{opby}, </if>
+			<if test="opat != null">`opAt` = #{opat}, </if>
+			<if test="delflag != null">`delFlag` = #{delflag}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cms_site where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cms_site where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

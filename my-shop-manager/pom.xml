@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.fengdu</groupId>
+		<artifactId>my-shop</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>my-shop-manager</artifactId>
+	<packaging>war</packaging>
+	<name>my-shop-manager Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.fengdu</groupId>
+			<artifactId>my-shop-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fengdu</groupId>
+			<artifactId>my-shop-shiro</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	<!-- 	<dependency>
+			<groupId>com.fengdu</groupId>
+			<artifactId>my-shop-api</artifactId>
+			<version>${project.version}</version>
+		</dependency> -->
+		<dependency>
+			<groupId>com.fengdu</groupId>
+			<artifactId>my-shop-gen</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fengdu</groupId>
+			<artifactId>my-shop-webchat</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+			<dependency>
+			<groupId>com.fengdu</groupId>
+			<artifactId>my-shop-goods</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+			<dependency>
+			<groupId>com.fengdu</groupId>
+			<artifactId>my-shop-order</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+			<dependency>
+			<groupId>com.fengdu</groupId>
+			<artifactId>my-shop-member</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+			<dependency>
+			<groupId>com.fengdu</groupId>
+			<artifactId>my-shop-wms</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+			<dependency>
+			<groupId>com.fengdu</groupId>
+			<artifactId>my-shop-pay</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-digester</groupId>
+			<artifactId>commons-digester</artifactId>
+			<version>2.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.8.3</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>1.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+		    <!-- json -->
+	   <!-- <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+            </dependency>
+			<dependency>
+			    <groupId>com.fasterxml.jackson.dataformat</groupId>
+			    <artifactId>jackson-dataformat-xml</artifactId>
+			</dependency> -->
+	</dependencies>
+	<!-- -->
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<profiles.activation>dev</profiles.activation>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<profiles.activation>prod</profiles.activation>
+			</properties>
+		</profile>
+	</profiles>
+
+	<build>
+		<finalName>my-shop-manager</finalName>
+		<scriptSourceDirectory>src/main/java</scriptSourceDirectory>
+		<!-- -->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*</include>
+				</includes>
+				<excludes>
+					<exclude>dev/*</exclude>
+					<exclude>prod/*</exclude>
+				</excludes>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>${profiles.activation}/*</include>
+				</includes>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<!-- -->
+				<!--<configuration>
+					<warName>${profiles.activation}</warName>
+					profile
+					<webResources>
+						<resource>
+							<filtering>true</filtering>
+							<directory>src/main/webapp</directory>
+							<includes>
+								<include>**/web.xml</include>
+							</includes>
+						</resource>
+					</webResources>
+					<warSourceDirectory>src/main/webapp</warSourceDirectory>
+					<webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+				</configuration>-->
+			</plugin>
+        <!-- 配置Tomcat插件 ,用于启动项目 -->  
+        <plugin>  
+            <groupId>org.apache.tomcat.maven</groupId>  
+            <artifactId>tomcat7-maven-plugin</artifactId>  
+            <version>2.2</version>
+            <!--如果不设置，则默认为猫的自定义端口，项目路径为http://localhost:默认端口/项目名  -->  
+            <configuration>  
+            <!--如果端口号改为8081：那么访问的时候路径的端口就要写成8081，否则404  -->  
+               <!--  <port>8080</port>   -->
+                <!-- 如果设置为/，则项目了路径为http://localhost:端口号 /-->  
+                <!-- 如果设置为/123，则项目了路径为http://localhost:端口号/123 -->  
+               <!--  <path>/123</path>   -->
+            </configuration>  
+        </plugin>  
+        
+		</plugins>
+	
+	</build>
+</project>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fengdu.dao.WxMassNewsDao">
+
+    <resultMap type="com.fengdu.entity.WxMassNewsEntity" id="wxMassNewsMap">
+        <result property="id" column="id"/>
+        <result property="thumbMediaId" column="thumb_media_id"/>
+        <result property="author" column="author"/>
+        <result property="title" column="title"/>
+        <result property="contentSourceUrl" column="content_source_url"/>
+        <result property="content" column="content"/>
+        <result property="digest" column="digest"/>
+        <result property="showCoverPic" column="show_cover_pic"/>
+        <result property="location" column="location"/>
+        <result property="wxid" column="wxid"/>
+        <result property="opby" column="opBy"/>
+        <result property="opat" column="opAt"/>
+        <result property="delflag" column="delFlag"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.fengdu.entity.WxMassNewsEntity">
+		select
+			`id`,
+			`thumb_media_id`,
+			`author`,
+			`title`,
+			`content_source_url`,
+			`content`,
+			`digest`,
+			`show_cover_pic`,
+			`location`,
+			`wxid`,
+			`opBy`,
+			`opAt`,
+			`delFlag`
+		from wx_mass_news
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.fengdu.entity.WxMassNewsEntity">
+		select
+    		`id`,
+    		`thumb_media_id`,
+    		`author`,
+    		`title`,
+    		`content_source_url`,
+    		`content`,
+    		`digest`,
+    		`show_cover_pic`,
+    		`location`,
+    		`wxid`,
+    		`opBy`,
+    		`opAt`,
+    		`delFlag`
+		from wx_mass_news
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from wx_mass_news
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.fengdu.entity.WxMassNewsEntity">
+		insert into wx_mass_news(
+			`id`,
+			`thumb_media_id`,
+			`author`,
+			`title`,
+			`content_source_url`,
+			`content`,
+			`digest`,
+			`show_cover_pic`,
+			`location`,
+			`wxid`,
+			`opBy`,
+			`opAt`,
+			`delFlag`)
+		values(
+			#{id},
+			#{thumbMediaId},
+			#{author},
+			#{title},
+			#{contentSourceUrl},
+			#{content},
+			#{digest},
+			#{showCoverPic},
+			#{location},
+			#{wxid},
+			#{opby},
+			#{opat},
+			#{delflag})
+	</insert>
+	 
+	<update id="update" parameterType="com.fengdu.entity.WxMassNewsEntity">
+		update wx_mass_news 
+		<set>
+			<if test="thumbMediaId != null">`thumb_media_id` = #{thumbMediaId}, </if>
+			<if test="author != null">`author` = #{author}, </if>
+			<if test="title != null">`title` = #{title}, </if>
+			<if test="contentSourceUrl != null">`content_source_url` = #{contentSourceUrl}, </if>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="digest != null">`digest` = #{digest}, </if>
+			<if test="showCoverPic != null">`show_cover_pic` = #{showCoverPic}, </if>
+			<if test="location != null">`location` = #{location}, </if>
+			<if test="wxid != null">`wxid` = #{wxid}, </if>
+			<if test="opby != null">`opBy` = #{opby}, </if>
+			<if test="opat != null">`opAt` = #{opat}, </if>
+			<if test="delflag != null">`delFlag` = #{delflag}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from wx_mass_news where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from wx_mass_news where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

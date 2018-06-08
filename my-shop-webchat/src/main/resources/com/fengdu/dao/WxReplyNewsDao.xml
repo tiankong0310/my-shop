@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fengdu.dao.WxReplyNewsDao">
+
+    <resultMap type="com.fengdu.entity.WxReplyNewsEntity" id="wxReplyNewsMap">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="picurl" column="picUrl"/>
+        <result property="url" column="url"/>
+        <result property="location" column="location"/>
+        <result property="opby" column="opBy"/>
+        <result property="opat" column="opAt"/>
+        <result property="delflag" column="delFlag"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.fengdu.entity.WxReplyNewsEntity">
+		select
+			`id`,
+			`title`,
+			`description`,
+			`picUrl`,
+			`url`,
+			`location`,
+			`opBy`,
+			`opAt`,
+			`delFlag`
+		from wx_reply_news
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.fengdu.entity.WxReplyNewsEntity">
+		select
+    		`id`,
+    		`title`,
+    		`description`,
+    		`picUrl`,
+    		`url`,
+    		`location`,
+    		`opBy`,
+    		`opAt`,
+    		`delFlag`
+		from wx_reply_news
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from wx_reply_news
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.fengdu.entity.WxReplyNewsEntity">
+		insert into wx_reply_news(
+			`id`,
+			`title`,
+			`description`,
+			`picUrl`,
+			`url`,
+			`location`,
+			`opBy`,
+			`opAt`,
+			`delFlag`)
+		values(
+			#{id},
+			#{title},
+			#{description},
+			#{picurl},
+			#{url},
+			#{location},
+			#{opby},
+			#{opat},
+			#{delflag})
+	</insert>
+	 
+	<update id="update" parameterType="com.fengdu.entity.WxReplyNewsEntity">
+		update wx_reply_news 
+		<set>
+			<if test="title != null">`title` = #{title}, </if>
+			<if test="description != null">`description` = #{description}, </if>
+			<if test="picurl != null">`picUrl` = #{picurl}, </if>
+			<if test="url != null">`url` = #{url}, </if>
+			<if test="location != null">`location` = #{location}, </if>
+			<if test="opby != null">`opBy` = #{opby}, </if>
+			<if test="opat != null">`opAt` = #{opat}, </if>
+			<if test="delflag != null">`delFlag` = #{delflag}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from wx_reply_news where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from wx_reply_news where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

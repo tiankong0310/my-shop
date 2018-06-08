@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fengdu.dao.WxMassDao">
+
+    <resultMap type="com.fengdu.entity.WxMassEntity" id="wxMassMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="mediaId" column="media_id"/>
+        <result property="scope" column="scope"/>
+        <result property="content" column="content"/>
+        <result property="status" column="status"/>
+        <result property="wxid" column="wxid"/>
+        <result property="opby" column="opBy"/>
+        <result property="opat" column="opAt"/>
+        <result property="delflag" column="delFlag"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.fengdu.entity.WxMassEntity">
+		select
+			`id`,
+			`name`,
+			`type`,
+			`media_id`,
+			`scope`,
+			`content`,
+			`status`,
+			`wxid`,
+			`opBy`,
+			`opAt`,
+			`delFlag`
+		from wx_mass
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.fengdu.entity.WxMassEntity">
+		select
+    		`id`,
+    		`name`,
+    		`type`,
+    		`media_id`,
+    		`scope`,
+    		`content`,
+    		`status`,
+    		`wxid`,
+    		`opBy`,
+    		`opAt`,
+    		`delFlag`
+		from wx_mass
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from wx_mass
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.fengdu.entity.WxMassEntity">
+		insert into wx_mass(
+			`id`,
+			`name`,
+			`type`,
+			`media_id`,
+			`scope`,
+			`content`,
+			`status`,
+			`wxid`,
+			`opBy`,
+			`opAt`,
+			`delFlag`)
+		values(
+			#{id},
+			#{name},
+			#{type},
+			#{mediaId},
+			#{scope},
+			#{content},
+			#{status},
+			#{wxid},
+			#{opby},
+			#{opat},
+			#{delflag})
+	</insert>
+	 
+	<update id="update" parameterType="com.fengdu.entity.WxMassEntity">
+		update wx_mass 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="mediaId != null">`media_id` = #{mediaId}, </if>
+			<if test="scope != null">`scope` = #{scope}, </if>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="wxid != null">`wxid` = #{wxid}, </if>
+			<if test="opby != null">`opBy` = #{opby}, </if>
+			<if test="opat != null">`opAt` = #{opat}, </if>
+			<if test="delflag != null">`delFlag` = #{delflag}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from wx_mass where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from wx_mass where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

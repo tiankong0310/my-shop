@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fengdu.dao.CmsClassLinkDao">
+
+    <resultMap type="com.fengdu.entity.CmsClassLinkEntity" id="cmsClassLinkMap">
+        <result property="classid" column="classId"/>
+        <result property="linkid" column="linkId"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.fengdu.entity.CmsClassLinkEntity">
+		select
+			`classId`,
+			`linkId`
+		from cms_class_link
+		where classId = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.fengdu.entity.CmsClassLinkEntity">
+		select
+    		`classId`,
+    		`linkId`
+		from cms_class_link
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by classId desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cms_class_link
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.fengdu.entity.CmsClassLinkEntity">
+		insert into cms_class_link(
+			`classId`,
+			`linkId`)
+		values(
+			#{classid},
+			#{linkid})
+	</insert>
+	 
+	<update id="update" parameterType="com.fengdu.entity.CmsClassLinkEntity">
+		update cms_class_link 
+		<set>
+			<if test="linkid != null">`linkId` = #{linkid}</if>
+		</set>
+		where classId = #{classid}
+	</update>
+	
+	<delete id="delete">
+		delete from cms_class_link where classId = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cms_class_link where classId in 
+		<foreach item="classid" collection="array" open="(" separator="," close=")">
+			#{classid}
+		</foreach>
+	</delete>
+
+</mapper>

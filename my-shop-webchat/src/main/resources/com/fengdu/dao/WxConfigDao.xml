@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fengdu.dao.WxConfigDao">
+
+    <resultMap type="com.fengdu.entity.WxConfigEntity" id="wxConfigMap">
+        <result property="id" column="id"/>
+        <result property="appname" column="appname"/>
+        <result property="ghid" column="ghid"/>
+        <result property="appid" column="appid"/>
+        <result property="appsecret" column="appsecret"/>
+        <result property="encodingaeskey" column="encodingAESKey"/>
+        <result property="token" column="token"/>
+        <result property="accessToken" column="access_token"/>
+        <result property="accessTokenExpires" column="access_token_expires"/>
+        <result property="accessTokenLastat" column="access_token_lastat"/>
+        <result property="opby" column="opBy"/>
+        <result property="opat" column="opAt"/>
+        <result property="delflag" column="delFlag"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.fengdu.entity.WxConfigEntity">
+		select
+			`id`,
+			`appname`,
+			`ghid`,
+			`appid`,
+			`appsecret`,
+			`encodingAESKey`,
+			`token`,
+			`access_token`,
+			`access_token_expires`,
+			`access_token_lastat`,
+			`opBy`,
+			`opAt`,
+			`delFlag`
+		from wx_config
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.fengdu.entity.WxConfigEntity">
+		select
+    		`id`,
+    		`appname`,
+    		`ghid`,
+    		`appid`,
+    		`appsecret`,
+    		`encodingAESKey`,
+    		`token`,
+    		`access_token`,
+    		`access_token_expires`,
+    		`access_token_lastat`,
+    		`opBy`,
+    		`opAt`,
+    		`delFlag`
+		from wx_config
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from wx_config
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.fengdu.entity.WxConfigEntity">
+		insert into wx_config(
+			`id`,
+			`appname`,
+			`ghid`,
+			`appid`,
+			`appsecret`,
+			`encodingAESKey`,
+			`token`,
+			`access_token`,
+			`access_token_expires`,
+			`access_token_lastat`,
+			`opBy`,
+			`opAt`,
+			`delFlag`)
+		values(
+			#{id},
+			#{appname},
+			#{ghid},
+			#{appid},
+			#{appsecret},
+			#{encodingaeskey},
+			#{token},
+			#{accessToken},
+			#{accessTokenExpires},
+			#{accessTokenLastat},
+			#{opby},
+			#{opat},
+			#{delflag})
+	</insert>
+	 
+	<update id="update" parameterType="com.fengdu.entity.WxConfigEntity">
+		update wx_config 
+		<set>
+			<if test="appname != null">`appname` = #{appname}, </if>
+			<if test="ghid != null">`ghid` = #{ghid}, </if>
+			<if test="appid != null">`appid` = #{appid}, </if>
+			<if test="appsecret != null">`appsecret` = #{appsecret}, </if>
+			<if test="encodingaeskey != null">`encodingAESKey` = #{encodingaeskey}, </if>
+			<if test="token != null">`token` = #{token}, </if>
+			<if test="accessToken != null">`access_token` = #{accessToken}, </if>
+			<if test="accessTokenExpires != null">`access_token_expires` = #{accessTokenExpires}, </if>
+			<if test="accessTokenLastat != null">`access_token_lastat` = #{accessTokenLastat}, </if>
+			<if test="opby != null">`opBy` = #{opby}, </if>
+			<if test="opat != null">`opAt` = #{opat}, </if>
+			<if test="delflag != null">`delFlag` = #{delflag}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from wx_config where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from wx_config where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

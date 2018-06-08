@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fengdu.dao.CmsChannelDao">
+
+    <resultMap type="com.fengdu.entity.CmsChannelEntity" id="cmsChannelMap">
+        <result property="id" column="id"/>
+        <result property="shopid" column="shopid"/>
+        <result property="parentid" column="parentId"/>
+        <result property="path" column="path"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="url" column="url"/>
+        <result property="target" column="target"/>
+        <result property="isshow" column="isShow"/>
+        <result property="disabled" column="disabled"/>
+        <result property="location" column="location"/>
+        <result property="haschildren" column="hasChildren"/>
+        <result property="opby" column="opBy"/>
+        <result property="opat" column="opAt"/>
+        <result property="delflag" column="delFlag"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.fengdu.entity.CmsChannelEntity">
+		select
+			`id`,
+			`shopid`,
+			`parentId`,
+			`path`,
+			`name`,
+			`type`,
+			`url`,
+			`target`,
+			`isShow`,
+			`disabled`,
+			`location`,
+			`hasChildren`,
+			`opBy`,
+			`opAt`,
+			`delFlag`
+		from cms_channel
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.fengdu.entity.CmsChannelEntity">
+		select
+    		`id`,
+    		`shopid`,
+    		`parentId`,
+    		`path`,
+    		`name`,
+    		`type`,
+    		`url`,
+    		`target`,
+    		`isShow`,
+    		`disabled`,
+    		`location`,
+    		`hasChildren`,
+    		`opBy`,
+    		`opAt`,
+    		`delFlag`
+		from cms_channel
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cms_channel
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.fengdu.entity.CmsChannelEntity">
+		insert into cms_channel(
+			`id`,
+			`shopid`,
+			`parentId`,
+			`path`,
+			`name`,
+			`type`,
+			`url`,
+			`target`,
+			`isShow`,
+			`disabled`,
+			`location`,
+			`hasChildren`,
+			`opBy`,
+			`opAt`,
+			`delFlag`)
+		values(
+			#{id},
+			#{shopid},
+			#{parentid},
+			#{path},
+			#{name},
+			#{type},
+			#{url},
+			#{target},
+			#{isshow},
+			#{disabled},
+			#{location},
+			#{haschildren},
+			#{opby},
+			#{opat},
+			#{delflag})
+	</insert>
+	 
+	<update id="update" parameterType="com.fengdu.entity.CmsChannelEntity">
+		update cms_channel 
+		<set>
+			<if test="shopid != null">`shopid` = #{shopid}, </if>
+			<if test="parentid != null">`parentId` = #{parentid}, </if>
+			<if test="path != null">`path` = #{path}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="url != null">`url` = #{url}, </if>
+			<if test="target != null">`target` = #{target}, </if>
+			<if test="isshow != null">`isShow` = #{isshow}, </if>
+			<if test="disabled != null">`disabled` = #{disabled}, </if>
+			<if test="location != null">`location` = #{location}, </if>
+			<if test="haschildren != null">`hasChildren` = #{haschildren}, </if>
+			<if test="opby != null">`opBy` = #{opby}, </if>
+			<if test="opat != null">`opAt` = #{opat}, </if>
+			<if test="delflag != null">`delFlag` = #{delflag}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cms_channel where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cms_channel where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

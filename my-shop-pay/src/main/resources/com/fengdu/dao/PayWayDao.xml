@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fengdu.dao.PayWayDao">
+
+    <resultMap type="com.fengdu.entity.PayWayEntity" id="payWayMap">
+        <result property="id" column="id"/>
+        <result property="version" column="version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="editTime" column="edit_time"/>
+        <result property="payWayCode" column="pay_way_code"/>
+        <result property="payWayName" column="pay_way_name"/>
+        <result property="payTypeCode" column="pay_type_code"/>
+        <result property="payTypeName" column="pay_type_name"/>
+        <result property="payProductCode" column="pay_product_code"/>
+        <result property="status" column="status"/>
+        <result property="sorts" column="sorts"/>
+        <result property="payRate" column="pay_rate"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.fengdu.entity.PayWayEntity">
+		select
+			`id`,
+			`version`,
+			`create_time`,
+			`edit_time`,
+			`pay_way_code`,
+			`pay_way_name`,
+			`pay_type_code`,
+			`pay_type_name`,
+			`pay_product_code`,
+			`status`,
+			`sorts`,
+			`pay_rate`
+		from pay_way
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.fengdu.entity.PayWayEntity">
+		select
+    		`id`,
+    		`version`,
+    		`create_time`,
+    		`edit_time`,
+    		`pay_way_code`,
+    		`pay_way_name`,
+    		`pay_type_code`,
+    		`pay_type_name`,
+    		`pay_product_code`,
+    		`status`,
+    		`sorts`,
+    		`pay_rate`
+		from pay_way
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from pay_way
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.fengdu.entity.PayWayEntity">
+		insert into pay_way(
+			`id`,
+			`version`,
+			`create_time`,
+			`edit_time`,
+			`pay_way_code`,
+			`pay_way_name`,
+			`pay_type_code`,
+			`pay_type_name`,
+			`pay_product_code`,
+			`status`,
+			`sorts`,
+			`pay_rate`)
+		values(
+			#{id},
+			#{version},
+			#{createTime},
+			#{editTime},
+			#{payWayCode},
+			#{payWayName},
+			#{payTypeCode},
+			#{payTypeName},
+			#{payProductCode},
+			#{status},
+			#{sorts},
+			#{payRate})
+	</insert>
+	 
+	<update id="update" parameterType="com.fengdu.entity.PayWayEntity">
+		update pay_way 
+		<set>
+			<if test="version != null">`version` = #{version}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}, </if>
+			<if test="editTime != null">`edit_time` = #{editTime}, </if>
+			<if test="payWayCode != null">`pay_way_code` = #{payWayCode}, </if>
+			<if test="payWayName != null">`pay_way_name` = #{payWayName}, </if>
+			<if test="payTypeCode != null">`pay_type_code` = #{payTypeCode}, </if>
+			<if test="payTypeName != null">`pay_type_name` = #{payTypeName}, </if>
+			<if test="payProductCode != null">`pay_product_code` = #{payProductCode}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="sorts != null">`sorts` = #{sorts}, </if>
+			<if test="payRate != null">`pay_rate` = #{payRate}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from pay_way where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from pay_way where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

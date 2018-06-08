@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fengdu.dao.WxMsgDao">
+
+    <resultMap type="com.fengdu.entity.WxMsgEntity" id="wxMsgMap">
+        <result property="id" column="id"/>
+        <result property="openid" column="openid"/>
+        <result property="nickname" column="nickname"/>
+        <result property="type" column="type"/>
+        <result property="content" column="content"/>
+        <result property="replyid" column="replyId"/>
+        <result property="wxid" column="wxid"/>
+        <result property="opby" column="opBy"/>
+        <result property="opat" column="opAt"/>
+        <result property="delflag" column="delFlag"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.fengdu.entity.WxMsgEntity">
+		select
+			`id`,
+			`openid`,
+			`nickname`,
+			`type`,
+			`content`,
+			`replyId`,
+			`wxid`,
+			`opBy`,
+			`opAt`,
+			`delFlag`
+		from wx_msg
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.fengdu.entity.WxMsgEntity">
+		select
+    		`id`,
+    		`openid`,
+    		`nickname`,
+    		`type`,
+    		`content`,
+    		`replyId`,
+    		`wxid`,
+    		`opBy`,
+    		`opAt`,
+    		`delFlag`
+		from wx_msg
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from wx_msg
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.fengdu.entity.WxMsgEntity">
+		insert into wx_msg(
+			`id`,
+			`openid`,
+			`nickname`,
+			`type`,
+			`content`,
+			`replyId`,
+			`wxid`,
+			`opBy`,
+			`opAt`,
+			`delFlag`)
+		values(
+			#{id},
+			#{openid},
+			#{nickname},
+			#{type},
+			#{content},
+			#{replyid},
+			#{wxid},
+			#{opby},
+			#{opat},
+			#{delflag})
+	</insert>
+	 
+	<update id="update" parameterType="com.fengdu.entity.WxMsgEntity">
+		update wx_msg 
+		<set>
+			<if test="openid != null">`openid` = #{openid}, </if>
+			<if test="nickname != null">`nickname` = #{nickname}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="replyid != null">`replyId` = #{replyid}, </if>
+			<if test="wxid != null">`wxid` = #{wxid}, </if>
+			<if test="opby != null">`opBy` = #{opby}, </if>
+			<if test="opat != null">`opAt` = #{opat}, </if>
+			<if test="delflag != null">`delFlag` = #{delflag}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from wx_msg where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from wx_msg where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
+	<!--swagger -->    
+	<!---->
+	<mvc:resources mapping="/api-doc/**" location="/api-doc/" />
+	<mvc:resources mapping="/static/**" location="/static/" />
+	<mvc:resources mapping="/js/**" location="/js/" />
+	<mvc:resources mapping="/css/**" location="/css/" />
+	<mvc:resources mapping="/img/**" location="/img/" />
+	<mvc:resources mapping="/**/**.html" location="/**/" />
+	<mvc:resources location="classpath:/META-INF/resources/"
+		mapping="swagger-ui.html" />
+	<mvc:resources location="classpath:/META-INF/resources/webjars/"
+		mapping="/webjars/**" />
+</beans>

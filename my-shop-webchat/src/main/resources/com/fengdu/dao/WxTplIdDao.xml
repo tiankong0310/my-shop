@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fengdu.dao.WxTplIdDao">
+
+    <resultMap type="com.fengdu.entity.WxTplIdEntity" id="wxTplIdMap">
+        <result property="id" column="id"/>
+        <result property="templateId" column="template_id"/>
+        <result property="wxid" column="wxid"/>
+        <result property="opby" column="opBy"/>
+        <result property="opat" column="opAt"/>
+        <result property="delflag" column="delFlag"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.fengdu.entity.WxTplIdEntity">
+		select
+			`id`,
+			`template_id`,
+			`wxid`,
+			`opBy`,
+			`opAt`,
+			`delFlag`
+		from wx_tpl_id
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.fengdu.entity.WxTplIdEntity">
+		select
+    		`id`,
+    		`template_id`,
+    		`wxid`,
+    		`opBy`,
+    		`opAt`,
+    		`delFlag`
+		from wx_tpl_id
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from wx_tpl_id
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.fengdu.entity.WxTplIdEntity">
+		insert into wx_tpl_id(
+			`id`,
+			`template_id`,
+			`wxid`,
+			`opBy`,
+			`opAt`,
+			`delFlag`)
+		values(
+			#{id},
+			#{templateId},
+			#{wxid},
+			#{opby},
+			#{opat},
+			#{delflag})
+	</insert>
+	 
+	<update id="update" parameterType="com.fengdu.entity.WxTplIdEntity">
+		update wx_tpl_id 
+		<set>
+			<if test="templateId != null">`template_id` = #{templateId}, </if>
+			<if test="wxid != null">`wxid` = #{wxid}, </if>
+			<if test="opby != null">`opBy` = #{opby}, </if>
+			<if test="opat != null">`opAt` = #{opat}, </if>
+			<if test="delflag != null">`delFlag` = #{delflag}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from wx_tpl_id where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from wx_tpl_id where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fengdu.dao.WmsEnterstockDetailDao">
+
+    <resultMap type="com.fengdu.entity.WmsEnterstockDetailEntity" id="wmsEnterstockDetailMap">
+        <result property="id" column="id"/>
+        <result property="enterstockId" column="enterstock_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="quantity" column="quantity"/>
+        <result property="price" column="price"/>
+        <result property="haveinvoice" column="haveinvoice"/>
+        <result property="invoicenum" column="invoicenum"/>
+        <result property="createdate" column="createdate"/>
+        <result property="createby" column="createby"/>
+        <result property="updatedate" column="updatedate"/>
+        <result property="updateby" column="updateby"/>
+        <result property="enable" column="enable"/>
+        <result property="sortNo" column="sort_no"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.fengdu.entity.WmsEnterstockDetailEntity">
+		select
+			`id`,
+			`enterstock_id`,
+			`product_id`,
+			`quantity`,
+			`price`,
+			`haveinvoice`,
+			`invoicenum`,
+			`createdate`,
+			`createby`,
+			`updatedate`,
+			`updateby`,
+			`enable`,
+			`sort_no`
+		from wms_enterstock_detail
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.fengdu.entity.WmsEnterstockDetailEntity">
+		select
+    		`id`,
+    		`enterstock_id`,
+    		`product_id`,
+    		`quantity`,
+    		`price`,
+    		`haveinvoice`,
+    		`invoicenum`,
+    		`createdate`,
+    		`createby`,
+    		`updatedate`,
+    		`updateby`,
+    		`enable`,
+    		`sort_no`
+		from wms_enterstock_detail
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from wms_enterstock_detail
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.fengdu.entity.WmsEnterstockDetailEntity">
+		insert into wms_enterstock_detail(
+			`id`,
+			`enterstock_id`,
+			`product_id`,
+			`quantity`,
+			`price`,
+			`haveinvoice`,
+			`invoicenum`,
+			`createdate`,
+			`createby`,
+			`updatedate`,
+			`updateby`,
+			`enable`,
+			`sort_no`)
+		values(
+			#{id},
+			#{enterstockId},
+			#{productId},
+			#{quantity},
+			#{price},
+			#{haveinvoice},
+			#{invoicenum},
+			#{createdate},
+			#{createby},
+			#{updatedate},
+			#{updateby},
+			#{enable},
+			#{sortNo})
+	</insert>
+	 
+	<update id="update" parameterType="com.fengdu.entity.WmsEnterstockDetailEntity">
+		update wms_enterstock_detail 
+		<set>
+			<if test="enterstockId != null">`enterstock_id` = #{enterstockId}, </if>
+			<if test="productId != null">`product_id` = #{productId}, </if>
+			<if test="quantity != null">`quantity` = #{quantity}, </if>
+			<if test="price != null">`price` = #{price}, </if>
+			<if test="haveinvoice != null">`haveinvoice` = #{haveinvoice}, </if>
+			<if test="invoicenum != null">`invoicenum` = #{invoicenum}, </if>
+			<if test="createdate != null">`createdate` = #{createdate}, </if>
+			<if test="createby != null">`createby` = #{createby}, </if>
+			<if test="updatedate != null">`updatedate` = #{updatedate}, </if>
+			<if test="updateby != null">`updateby` = #{updateby}, </if>
+			<if test="enable != null">`enable` = #{enable}, </if>
+			<if test="sortNo != null">`sort_no` = #{sortNo}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from wms_enterstock_detail where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from wms_enterstock_detail where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

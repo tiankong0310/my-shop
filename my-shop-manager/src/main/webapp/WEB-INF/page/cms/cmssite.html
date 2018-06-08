@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    #parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+        <Row :gutter="16">
+            <i-col span="4">
+                <i-input v-model="q.name" @on-enter="query" placeholder="名称"/>
+            </i-col>
+            <i-button @click="query">查询</i-button>
+			#if($shiro.hasPermission("cmssite:save"))
+            <i-button type="info" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</i-button>
+			#end
+			#if($shiro.hasPermission("cmssite:update"))
+            <i-button type="warning" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</i-button>
+			#end
+			#if($shiro.hasPermission("cmssite:delete"))
+            <i-button type="error" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</i-button>
+			#end
+        </Row>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+
+    <Card v-show="!showList">
+        <p slot="title">{{title}}</p>
+		<i-form ref="formValidate" :model="cmsSite" :rules="ruleValidate" :label-width="80">
+            <Form-item label="预留商城ID" prop="shopid">
+                <i-input v-model="cmsSite.shopid" placeholder="预留商城ID"/>
+            </Form-item>
+            <Form-item label="名称" prop="siteName">
+                <i-input v-model="cmsSite.siteName" placeholder="名称"/>
+            </Form-item>
+            <Form-item label="域名" prop="siteDomain">
+                <i-input v-model="cmsSite.siteDomain" placeholder="域名"/>
+            </Form-item>
+            <Form-item label="ICP" prop="siteIcp">
+                <i-input v-model="cmsSite.siteIcp" placeholder="ICP"/>
+            </Form-item>
+            <Form-item label="LOGO" prop="siteLogo">
+                <i-input v-model="cmsSite.siteLogo" placeholder="LOGO"/>
+            </Form-item>
+            <Form-item label="WAPLOGO" prop="siteWapLogo">
+                <i-input v-model="cmsSite.siteWapLogo" placeholder="WAPLOGO"/>
+            </Form-item>
+            <Form-item label="客服QQ" prop="siteQq">
+                <i-input v-model="cmsSite.siteQq" placeholder="客服QQ"/>
+            </Form-item>
+            <Form-item label="邮箱" prop="siteEmail">
+                <i-input v-model="cmsSite.siteEmail" placeholder="邮箱"/>
+            </Form-item>
+            <Form-item label="电话" prop="siteTel">
+                <i-input v-model="cmsSite.siteTel" placeholder="电话"/>
+            </Form-item>
+            <Form-item label="微博" prop="weiboName">
+                <i-input v-model="cmsSite.weiboName" placeholder="微博"/>
+            </Form-item>
+            <Form-item label="微博地址" prop="weiboUrl">
+                <i-input v-model="cmsSite.weiboUrl" placeholder="微博地址"/>
+            </Form-item>
+            <Form-item label="微博二维码" prop="weiboQrcode">
+                <i-input v-model="cmsSite.weiboQrcode" placeholder="微博二维码"/>
+            </Form-item>
+            <Form-item label="微信名称" prop="wechatName">
+                <i-input v-model="cmsSite.wechatName" placeholder="微信名称"/>
+            </Form-item>
+            <Form-item label="微信ID" prop="wechatId">
+                <i-input v-model="cmsSite.wechatId" placeholder="微信ID"/>
+            </Form-item>
+            <Form-item label="微信二维码" prop="wechatQrcode">
+                <i-input v-model="cmsSite.wechatQrcode" placeholder="微信二维码"/>
+            </Form-item>
+            <Form-item label="关键词" prop="seoKeywords">
+                <i-input v-model="cmsSite.seoKeywords" placeholder="关键词"/>
+            </Form-item>
+            <Form-item label="描述" prop="seoDescription">
+                <i-input v-model="cmsSite.seoDescription" placeholder="描述"/>
+            </Form-item>
+            <Form-item label="底部版权" prop="footerContent">
+                <i-input v-model="cmsSite.footerContent" placeholder="底部版权"/>
+            </Form-item>
+            <Form-item label="操作人" prop="opby">
+                <i-input v-model="cmsSite.opby" placeholder="操作人"/>
+            </Form-item>
+            <Form-item label="操作时间" prop="opat">
+                <i-input v-model="cmsSite.opat" placeholder="操作时间"/>
+            </Form-item>
+            <Form-item label="删除标记" prop="delflag">
+                <i-input v-model="cmsSite.delflag" placeholder="删除标记"/>
+            </Form-item>
+            <Form-item>
+                <i-button type="primary" @click="handleSubmit('formValidate')">提交</i-button>
+                <i-button type="warning" @click="reload" style="margin-left: 8px"/>返回</i-button>
+                <i-button type="ghost" @click="handleReset('formValidate')" style="margin-left: 8px">重置</i-button>
+            </Form-item>
+        </i-form>
+	</Card>
+</div>
+
+<script src="${rc.contextPath}/js/cms/cmssite.js?_${date.systemTime}"></script>
+</body>
+</html>

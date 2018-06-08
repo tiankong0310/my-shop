@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fengdu.dao.WxMassSendDao">
+
+    <resultMap type="com.fengdu.entity.WxMassSendEntity" id="wxMassSendMap">
+        <result property="id" column="id"/>
+        <result property="massid" column="massId"/>
+        <result property="receivers" column="receivers"/>
+        <result property="status" column="status"/>
+        <result property="msgid" column="msgId"/>
+        <result property="errcode" column="errCode"/>
+        <result property="errmsg" column="errMsg"/>
+        <result property="wxid" column="wxid"/>
+        <result property="opby" column="opBy"/>
+        <result property="opat" column="opAt"/>
+        <result property="delflag" column="delFlag"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.fengdu.entity.WxMassSendEntity">
+		select
+			`id`,
+			`massId`,
+			`receivers`,
+			`status`,
+			`msgId`,
+			`errCode`,
+			`errMsg`,
+			`wxid`,
+			`opBy`,
+			`opAt`,
+			`delFlag`
+		from wx_mass_send
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.fengdu.entity.WxMassSendEntity">
+		select
+    		`id`,
+    		`massId`,
+    		`receivers`,
+    		`status`,
+    		`msgId`,
+    		`errCode`,
+    		`errMsg`,
+    		`wxid`,
+    		`opBy`,
+    		`opAt`,
+    		`delFlag`
+		from wx_mass_send
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from wx_mass_send
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.fengdu.entity.WxMassSendEntity">
+		insert into wx_mass_send(
+			`id`,
+			`massId`,
+			`receivers`,
+			`status`,
+			`msgId`,
+			`errCode`,
+			`errMsg`,
+			`wxid`,
+			`opBy`,
+			`opAt`,
+			`delFlag`)
+		values(
+			#{id},
+			#{massid},
+			#{receivers},
+			#{status},
+			#{msgid},
+			#{errcode},
+			#{errmsg},
+			#{wxid},
+			#{opby},
+			#{opat},
+			#{delflag})
+	</insert>
+	 
+	<update id="update" parameterType="com.fengdu.entity.WxMassSendEntity">
+		update wx_mass_send 
+		<set>
+			<if test="massid != null">`massId` = #{massid}, </if>
+			<if test="receivers != null">`receivers` = #{receivers}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="msgid != null">`msgId` = #{msgid}, </if>
+			<if test="errcode != null">`errCode` = #{errcode}, </if>
+			<if test="errmsg != null">`errMsg` = #{errmsg}, </if>
+			<if test="wxid != null">`wxid` = #{wxid}, </if>
+			<if test="opby != null">`opBy` = #{opby}, </if>
+			<if test="opat != null">`opAt` = #{opat}, </if>
+			<if test="delflag != null">`delFlag` = #{delflag}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from wx_mass_send where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from wx_mass_send where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

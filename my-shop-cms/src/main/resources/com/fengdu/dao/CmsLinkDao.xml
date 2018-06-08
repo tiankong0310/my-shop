@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fengdu.dao.CmsLinkDao">
+
+    <resultMap type="com.fengdu.entity.CmsLinkEntity" id="cmsLinkMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="picurl" column="picurl"/>
+        <result property="url" column="url"/>
+        <result property="target" column="target"/>
+        <result property="classid" column="classId"/>
+        <result property="opby" column="opBy"/>
+        <result property="opat" column="opAt"/>
+        <result property="delflag" column="delFlag"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.fengdu.entity.CmsLinkEntity">
+		select
+			`id`,
+			`name`,
+			`type`,
+			`picurl`,
+			`url`,
+			`target`,
+			`classId`,
+			`opBy`,
+			`opAt`,
+			`delFlag`
+		from cms_link
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.fengdu.entity.CmsLinkEntity">
+		select
+    		`id`,
+    		`name`,
+    		`type`,
+    		`picurl`,
+    		`url`,
+    		`target`,
+    		`classId`,
+    		`opBy`,
+    		`opAt`,
+    		`delFlag`
+		from cms_link
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cms_link
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.fengdu.entity.CmsLinkEntity">
+		insert into cms_link(
+			`id`,
+			`name`,
+			`type`,
+			`picurl`,
+			`url`,
+			`target`,
+			`classId`,
+			`opBy`,
+			`opAt`,
+			`delFlag`)
+		values(
+			#{id},
+			#{name},
+			#{type},
+			#{picurl},
+			#{url},
+			#{target},
+			#{classid},
+			#{opby},
+			#{opat},
+			#{delflag})
+	</insert>
+	 
+	<update id="update" parameterType="com.fengdu.entity.CmsLinkEntity">
+		update cms_link 
+		<set>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="picurl != null">`picurl` = #{picurl}, </if>
+			<if test="url != null">`url` = #{url}, </if>
+			<if test="target != null">`target` = #{target}, </if>
+			<if test="classid != null">`classId` = #{classid}, </if>
+			<if test="opby != null">`opBy` = #{opby}, </if>
+			<if test="opat != null">`opAt` = #{opat}, </if>
+			<if test="delflag != null">`delFlag` = #{delflag}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cms_link where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cms_link where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

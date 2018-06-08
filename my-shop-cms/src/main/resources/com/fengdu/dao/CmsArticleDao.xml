@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fengdu.dao.CmsArticleDao">
+
+    <resultMap type="com.fengdu.entity.CmsArticleEntity" id="cmsArticleMap">
+        <result property="id" column="id"/>
+        <result property="shopid" column="shopid"/>
+        <result property="title" column="title"/>
+        <result property="info" column="info"/>
+        <result property="author" column="author"/>
+        <result property="picurl" column="picurl"/>
+        <result property="content" column="content"/>
+        <result property="disabled" column="disabled"/>
+        <result property="publishat" column="publishAt"/>
+        <result property="location" column="location"/>
+        <result property="channelid" column="channelId"/>
+        <result property="opby" column="opBy"/>
+        <result property="opat" column="opAt"/>
+        <result property="delflag" column="delFlag"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.fengdu.entity.CmsArticleEntity">
+		select
+			`id`,
+			`shopid`,
+			`title`,
+			`info`,
+			`author`,
+			`picurl`,
+			`content`,
+			`disabled`,
+			`publishAt`,
+			`location`,
+			`channelId`,
+			`opBy`,
+			`opAt`,
+			`delFlag`
+		from cms_article
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.fengdu.entity.CmsArticleEntity">
+		select
+    		`id`,
+    		`shopid`,
+    		`title`,
+    		`info`,
+    		`author`,
+    		`picurl`,
+    		`content`,
+    		`disabled`,
+    		`publishAt`,
+    		`location`,
+    		`channelId`,
+    		`opBy`,
+    		`opAt`,
+    		`delFlag`
+		from cms_article
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from cms_article
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.fengdu.entity.CmsArticleEntity">
+		insert into cms_article(
+			`id`,
+			`shopid`,
+			`title`,
+			`info`,
+			`author`,
+			`picurl`,
+			`content`,
+			`disabled`,
+			`publishAt`,
+			`location`,
+			`channelId`,
+			`opBy`,
+			`opAt`,
+			`delFlag`)
+		values(
+			#{id},
+			#{shopid},
+			#{title},
+			#{info},
+			#{author},
+			#{picurl},
+			#{content},
+			#{disabled},
+			#{publishat},
+			#{location},
+			#{channelid},
+			#{opby},
+			#{opat},
+			#{delflag})
+	</insert>
+	 
+	<update id="update" parameterType="com.fengdu.entity.CmsArticleEntity">
+		update cms_article 
+		<set>
+			<if test="shopid != null">`shopid` = #{shopid}, </if>
+			<if test="title != null">`title` = #{title}, </if>
+			<if test="info != null">`info` = #{info}, </if>
+			<if test="author != null">`author` = #{author}, </if>
+			<if test="picurl != null">`picurl` = #{picurl}, </if>
+			<if test="content != null">`content` = #{content}, </if>
+			<if test="disabled != null">`disabled` = #{disabled}, </if>
+			<if test="publishat != null">`publishAt` = #{publishat}, </if>
+			<if test="location != null">`location` = #{location}, </if>
+			<if test="channelid != null">`channelId` = #{channelid}, </if>
+			<if test="opby != null">`opBy` = #{opby}, </if>
+			<if test="opat != null">`opAt` = #{opat}, </if>
+			<if test="delflag != null">`delFlag` = #{delflag}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from cms_article where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from cms_article where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

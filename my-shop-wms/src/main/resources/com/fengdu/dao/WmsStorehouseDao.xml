@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fengdu.dao.WmsStorehouseDao">
+
+    <resultMap type="com.fengdu.entity.WmsStorehouseEntity" id="wmsStorehouseMap">
+        <result property="id" column="id"/>
+        <result property="storehouseId" column="storehouse_id"/>
+        <result property="address" column="address"/>
+        <result property="phone" column="phone"/>
+        <result property="userId" column="user_id"/>
+        <result property="createdate" column="createdate"/>
+        <result property="createby" column="createby"/>
+        <result property="updatedate" column="updatedate"/>
+        <result property="updateby" column="updateby"/>
+        <result property="enable" column="enable"/>
+        <result property="sortNo" column="sort_no"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.fengdu.entity.WmsStorehouseEntity">
+		select
+			`id`,
+			`storehouse_id`,
+			`address`,
+			`phone`,
+			`user_id`,
+			`createdate`,
+			`createby`,
+			`updatedate`,
+			`updateby`,
+			`enable`,
+			`sort_no`
+		from wms_storehouse
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.fengdu.entity.WmsStorehouseEntity">
+		select
+    		`id`,
+    		`storehouse_id`,
+    		`address`,
+    		`phone`,
+    		`user_id`,
+    		`createdate`,
+    		`createby`,
+    		`updatedate`,
+    		`updateby`,
+    		`enable`,
+    		`sort_no`
+		from wms_storehouse
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from wms_storehouse
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.fengdu.entity.WmsStorehouseEntity">
+		insert into wms_storehouse(
+			`id`,
+			`storehouse_id`,
+			`address`,
+			`phone`,
+			`user_id`,
+			`createdate`,
+			`createby`,
+			`updatedate`,
+			`updateby`,
+			`enable`,
+			`sort_no`)
+		values(
+			#{id},
+			#{storehouseId},
+			#{address},
+			#{phone},
+			#{userId},
+			#{createdate},
+			#{createby},
+			#{updatedate},
+			#{updateby},
+			#{enable},
+			#{sortNo})
+	</insert>
+	 
+	<update id="update" parameterType="com.fengdu.entity.WmsStorehouseEntity">
+		update wms_storehouse 
+		<set>
+			<if test="storehouseId != null">`storehouse_id` = #{storehouseId}, </if>
+			<if test="address != null">`address` = #{address}, </if>
+			<if test="phone != null">`phone` = #{phone}, </if>
+			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="createdate != null">`createdate` = #{createdate}, </if>
+			<if test="createby != null">`createby` = #{createby}, </if>
+			<if test="updatedate != null">`updatedate` = #{updatedate}, </if>
+			<if test="updateby != null">`updateby` = #{updateby}, </if>
+			<if test="enable != null">`enable` = #{enable}, </if>
+			<if test="sortNo != null">`sort_no` = #{sortNo}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from wms_storehouse where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from wms_storehouse where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>
