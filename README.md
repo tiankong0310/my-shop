@@ -4,7 +4,7 @@ my-shop基于Spring+SpringMVC+Mybatis+ Shiro分布式敏捷开发系统架构，
 git：https://gitee.com/tiankong0310/my-shop.git
 github:https://github.com/tiankong0310/my-shop
 
-官方QQ群1：711281203 ,群2:685261895 欢迎大家fork,star,有兴趣的可一起参与开发，谢谢！
+官方QQ群1：711281203 ,群2:685261895 欢迎大家fork,star,有兴趣的可一起参与开发，谢谢！(如有问题，请联系,小天qq:2366307000)
 
 前言
 
