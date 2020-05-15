@@ -17,7 +17,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<springfoxversion>2.2.2</springfoxversion>
-		<version.jackson>2.5.0</version.jackson>
+		<version.jackson>2.11.0</version.jackson>
 	</properties>
 	<dependencies>
 		<dependency>
