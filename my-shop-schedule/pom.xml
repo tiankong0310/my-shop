@@ -13,7 +13,7 @@
   
    <properties>
      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <quartz-version>2.2.3</quartz-version>
+        <quartz-version>2.3.2</quartz-version>
     </properties>
     <dependencies>
       <dependency>
